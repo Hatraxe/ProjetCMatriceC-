@@ -10,13 +10,13 @@ template <class MType> class CMatrice
 {
 private:
 	//Attributs
-	int iMATNbrColonnes;
-	int iMATNbrLignes;
-	CListe<MType>* pLISMATMatrice;
+	unsigned int uiMATNbColonnes;
+	unsigned int uiMATNbLignes;
+	CListe<CListe<MType>>* pLISMATMatrice;
 public:
 	//Déclaration des constructeurs
 	CMatrice<MType>(); // constructeur par défaut
-	CMatrice<MType>(int iParamLignes, int iParamColonnes); // constructeur de confort
+	CMatrice<MType>(unsigned int uiParamLignes, unsigned int iParamColonnes); // constructeur de confort
 	CMatrice<MType>(const CMatrice<MType>& MATParam); //constructeur de recopie
 
 	//Déclaration du destrcuteur
@@ -26,22 +26,22 @@ public:
 
 	//Getters
 
-	int MATLireNbrColonnes();
-	int MATLireNbrLignes();
-	CListe<MType>* MATLireMatrice();
+	unsigned int MATLireNbColonnes();
+	unsigned int MATLireNbLignes();
+	CListe<CListe<MType>>* MATLireMatrice();
 
 	//Setters
 
-	void MATModifierNbrColonnes(int iColonnes);
-	void MATModifierNbrLignes(int iLignes);
-	void MATModifierMatrice(int iParamLignes, int iParamColonnes, CListe<MType>* LISParamMatrice);
+	void MATModifierNbColonnes(unsigned int iColonnes);
+	void MATModifierNbLignes(unsigned int iLignes);
+	void MATModifierMatrice(unsigned int uiParamLignes, unsigned int uiParamColonnes, CListe<CListe<MType>>* LISParamMatrice);
 
 	//Déclarations des méthodes
 
 	void MATAfficherMatrice();
-	void MATModifierElement2D(int iParamLignes, int iParamColonnes, MType MTParamElement);
-	void MATModifierElement1D(int iIndice, MType MTParamElement);
-	MType MATLireTableau(int iParamIndice);
+	void MATModifierElement2D(unsigned int uiParamLignes, unsigned int iParamColonnes, MType MTParamElement);
+	void MATModifierElement1D(unsigned int iIndice, MType MTParamElement);
+	MType MATLireTableau(unsigned int uiParamIndice);
 	CMatrice<MType> MATTransposer();
 
 	//Déclaration des surcharges
@@ -58,8 +58,9 @@ public:
 	CMatrice<MType> operator/(MType MTParamMatrice)const;
 	//friend CMatrice<MType> operator/(MType mtparam, CMatrice<double> MTParamMatrice);
 
-	MType& operator[](const int iIndice);
+	MType& operator[](const unsigned int iIndice);
 	CMatrice<MType>& operator=(CMatrice<MType> MATParam);
+	
 };
 
 CMatrice<double> operator*(double mtpParam, CMatrice<double> MTParamMatrice);
@@ -67,16 +68,22 @@ CMatrice<double> operator/(double mtpParam, CMatrice<double> MTParamMatrice);
 
 /*************************************************************************************************************
 * Resume : Constructeur de confort
-* Entrees : int iParamLignes, int iParamColonnes
-* Preconditions : {(iParamLignes && iParamColonnes )>= 0}
+* Entrees : int uiParamLignes, int iParamColonnes
+* Preconditions : {(uiParamLignes && iParamColonnes )>= 0}
 * Sorties :
 * Postconditions : {Creation d'un objet CMatrice avec le nombre souhaité de colonnes et de lignes}
 ***************************************************************************************************************/
 
-template <class MType> CMatrice<MType>::CMatrice(int iParamLignes, int iParamColonnes) {
-	iMATNbrColonnes = iParamColonnes;
-	iMATNbrLignes = iParamLignes;
-	pLISMATMatrice = new MType[iMATNbrColonnes * iMATNbrLignes];
+template <class MType> CMatrice<MType>::CMatrice(unsigned int uiParamLignes, unsigned int uiParamColonnes) {
+	uiMATNbColonnes = uiParamColonnes;
+	uiMATNbLignes = uiParamLignes;
+	pLISMATMatrice = new CListe<CListe<MType>>(uiParamColonnes);
+	for (unsigned int uiBoucle = 0; uiBoucle < uiMATNbColonnes; uiBoucle++)
+	{
+		 
+		 pLISMATMatrice->LISAjouterElement = new CListe<MType>(uiParamLignes);
+		 
+	}
 }
 
 /*************************************************************************************************************
@@ -88,9 +95,9 @@ template <class MType> CMatrice<MType>::CMatrice(int iParamLignes, int iParamCol
 ***************************************************************************************************************/
 
 template <class MType> CMatrice<MType>::CMatrice() {
-	iMATNbrColonnes = 1;
-	iMATNbrLignes = 1;
-//	pLISMATMatrice = new MType[iMATNbrColonnes * iMATNbrLignes];
+	uiMATNbColonnes = 0;
+	uiMATNbLignes = 0;
+	pLISMATMatrice = new CListe<CListe<MType>>();
 
 }
 
@@ -102,11 +109,11 @@ template <class MType> CMatrice<MType>::CMatrice() {
 * Postconditions: {Recopie de la CMatrice MATParam}
 ***************************************************************************************************************/
 template <class MType> CMatrice<MType>::CMatrice(const CMatrice<MType>& MATParam) {
-/*	iMATNbrColonnes = MATParam.iMATNbrColonnes;
-	iMATNbrLignes = MATParam.iMATNbrLignes;
+/*	uiMATNbColonnes = MATParam.uiMATNbColonnes;
+	uiMATNbLignes = MATParam.uiMATNbLignes;
 
-	pLISMATMatrice = new MType[iMATNbrColonnes * iMATNbrLignes];
-	for (int iIterator = 0; iIterator < iMATNbrColonnes * iMATNbrLignes; iIterator++) {
+	pLISMATMatrice = new MType[uiMATNbColonnes * uiMATNbLignes];
+	for (int iIterator = 0; iIterator < uiMATNbColonnes * uiMATNbLignes; iIterator++) {
 		pLISMATMatrice[iIterator] = MATParam.pLISMATMatrice[iIterator];
 	}*/
 }
@@ -131,8 +138,8 @@ template <class MType> CMatrice<MType>::~CMatrice() {
 * Postconditions: {L'entier renvoye est egale au nombre de colonnes de l'objet CMatrice}
 ***************************************************************************************************************/
 
-template <class MType> int CMatrice<MType>::MATLireNbrColonnes() {
-	return iMATNbrColonnes;
+template <class MType> unsigned int CMatrice<MType>::MATLireNbColonnes() {
+	return uiMATNbColonnes;
 }
 
 /*************************************************************************************************************
@@ -143,8 +150,8 @@ template <class MType> int CMatrice<MType>::MATLireNbrColonnes() {
 * Postconditions: {L'entier renvoye est egale au nombre de lignes de l'objet CMatrice}
 ***************************************************************************************************************/
 
-template <class MType> int CMatrice<MType>::MATLireNbrLignes() {
-	return iMATNbrLignes;
+template <class MType> unsigned int CMatrice<MType>::MATLireNbLignes() {
+	return uiMATNbLignes;
 }
 
 /*************************************************************************************************************
@@ -155,7 +162,7 @@ template <class MType> int CMatrice<MType>::MATLireNbrLignes() {
 * Postconditions: {Le pointeur retourne pointe sur le tableau de l'objet CMatrice}
 ***************************************************************************************************************/
 
-template <class MType> CListe<MType>* CMatrice<MType>::MATLireMatrice() {
+template <class MType> CListe<CListe<MType>>* CMatrice<MType>::MATLireMatrice() {
 	return pLISMATMatrice;
 }
 
@@ -164,38 +171,35 @@ template <class MType> CListe<MType>* CMatrice<MType>::MATLireMatrice() {
 * Entrees: int iColonnes
 * Preconditions: {iColonnes >= 0}
 * Sorties:
-* Postconditions: {iMATNbrColonnes == iColonnes}
+* Postconditions: {uiMATNbColonnes == iColonnes}
 ***************************************************************************************************************/
 
-template <class MType> void CMatrice<MType>::MATModifierNbrColonnes(int iColonnes) {
+template <class MType> void CMatrice<MType>::MATModifierNbColonnes(unsigned int uiColonnes) {
 
-	if (iColonnes < 0) {
-		//CException CException(1);
-		//throw CException;
-	}
+	
 
-	if (iColonnes != iMATNbrColonnes) {
-		MType* MatriceTemp = new MType[iColonnes * iMATNbrLignes];
+	if (uiColonnes != uiMATNbColonnes) {
+		MType* MatriceTemp = new MType[uiColonnes * uiMATNbLignes];
 
-		if (iColonnes < iMATNbrColonnes) {
-			for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-				for (int iColonneIterator = 0; iColonneIterator < iColonnes; iColonneIterator++) {
-//					MatriceTemp[iLigneIterator * iColonnes + iColonneIterator] = pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iColonneIterator];
+		if (uiColonnes < uiMATNbColonnes) {
+			for (unsigned int uiLigneIterator = 0; uiLigneIterator < uiMATNbLignes; uiLigneIterator++) {
+				for (unsigned int uiColonneIterator = 0; uiColonneIterator < uiColonnes; uiColonneIterator++) {
+//					MatriceTemp[uiLigneIterator * uiColonnes + uiColonneIterator] = pLISMATMatrice[uiLigneIterator * uiMATNbColonnes + uiColonneIterator];
 				}
 			}
 		}
 
-		if (iColonnes > iMATNbrColonnes) {
-			for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-				for (int iColonneIterator = 0; iColonneIterator < iMATNbrColonnes; iColonneIterator++) {
-//					MatriceTemp[iLigneIterator * iColonnes + iColonneIterator] = pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iColonneIterator];
+		if (uiColonnes > uiMATNbColonnes) {
+			for (unsigned int uiLigneIterator = 0; uiLigneIterator < uiMATNbLignes; uiLigneIterator++) {
+				for (unsigned int uiColonneIterator = 0; uiColonneIterator < uiMATNbColonnes; uiColonneIterator++) {
+//					MatriceTemp[uiLigneIterator * uiColonnes + uiColonneIterator] = pLISMATMatrice[uiLigneIterator * uiMATNbColonnes + uiColonneIterator];
 				}
 			}
 		}
 
 		delete(pLISMATMatrice);
 //		pLISMATMatrice = MatriceTemp;
-		iMATNbrColonnes = iColonnes;
+		uiMATNbColonnes = uiColonnes;
 	}
 
 }
@@ -205,54 +209,50 @@ template <class MType> void CMatrice<MType>::MATModifierNbrColonnes(int iColonne
 * Entrees: int iLignes
 * Preconditions: {iLignes >= 0}
 * Sorties:
-* Postconditions: {iMATNbrLignes == iLignes}
+* Postconditions: {uiMATNbLignes == iLignes}
 ***************************************************************************************************************/
 
-template <class MType> void CMatrice<MType>::MATModifierNbrLignes(int iLignes) {
+template <class MType> void CMatrice<MType>::MATModifierNbLignes(unsigned int uiLignes) {
 
-	if (iLignes < 0) {
-//		CException CException(1);
-		//throw CException;
-	}
 
-	if (iLignes != iMATNbrLignes) {
-		MType* MatriceTemp = new MType[iMATNbrColonnes * iLignes];
+	if (uiLignes != uiMATNbLignes) {
+		MType* MatriceTemp = new MType[uiMATNbColonnes * uiLignes];
 
-		if (iLignes < iMATNbrLignes) {
-			for (int iLigneIterator = 0; iLigneIterator < iLignes; iLigneIterator++) {
-				for (int iColonneIterator = 0; iColonneIterator < iMATNbrColonnes; iColonneIterator++) {
-//					MatriceTemp[iLigneIterator * iMATNbrColonnes + iColonneIterator] = pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iColonneIterator];
+		if (uiLignes < uiMATNbLignes) {
+			for (unsigned int uiLigneIterator = 0; uiLigneIterator < uiLignes; uiLigneIterator++) {
+				for (unsigned int uiColonneIterator = 0; uiColonneIterator < uiMATNbColonnes; uiColonneIterator++) {
+//					MatriceTemp[uiLigneIterator * uiMATNbColonnes + uiColonneIterator] = pLISMATMatrice[uiLigneIterator * uiMATNbColonnes + uiColonneIterator];
 				}
 			}
 		}
 
-		if (iLignes > iMATNbrLignes) {
-			for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-				for (int iColonneIterator = 0; iColonneIterator < iMATNbrColonnes; iColonneIterator++) {
-//					MatriceTemp[iLigneIterator * iMATNbrColonnes + iColonneIterator] = pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iColonneIterator];
+		if (uiLignes > uiMATNbLignes) {
+			for (unsigned int uiLigneIterator = 0; uiLigneIterator < uiMATNbLignes; uiLigneIterator++) {
+				for (unsigned int uiColonneIterator = 0; uiColonneIterator < uiMATNbColonnes; uiColonneIterator++) {
+//					MatriceTemp[uiLigneIterator * uiMATNbColonnes + uiColonneIterator] = pLISMATMatrice[uiLigneIterator * uiMATNbColonnes + uiColonneIterator];
 				}
 			}
 		}
 
 		delete(pLISMATMatrice);
 //		pLISMATMatrice = MatriceTemp;
-		iMATNbrLignes = iLignes;
+		uiMATNbLignes = uiLignes;
 	}
 }
 
 /*************************************************************************************************************
 * Resume : Fonction permettant de modifier tout les attributs de l'objet CMatrice
-* Entrees : int iParamLignes, int iParamColonnes, MType* MTParamMatrice
-* Preconditions : {(iParamLignes && iParamColonnes) >=0}
+* Entrees : int uiParamLignes, int iParamColonnes, MType* MTParamMatrice
+* Preconditions : {(uiParamLignes && iParamColonnes) >=0}
 * Sorties :
-* Postconditions : {Nombre de lignes de l'objet CMatrice =iParamLignes ,son nombre de colonnes = iParamColonnes et son tableau est MTParamMatrice}
+* Postconditions : {Nombre de lignes de l'objet CMatrice =uiParamLignes ,son nombre de colonnes = iParamColonnes et son tableau est MTParamMatrice}
 ***************************************************************************************************************/
 
-template <class MType> void CMatrice<MType>::MATModifierMatrice(int iParamLignes, int iParamColonnes, CListe<MType>* LISParamMatrice) {
-	delete(pLISMATMatrice);
+template <class MType> void CMatrice<MType>::MATModifierMatrice(unsigned int uiParamLignes, unsigned int uiParamColonnes, CListe<CListe<MType>>* LISParamMatrice) {
 
-	MATModifierNbrColonnes(iParamColonnes);
-	MATModifierNbrLignes(iParamLignes);
+	delete(pLISMATMatrice);
+	MATModifierNbColonnes(uiParamColonnes);
+	MATModifierNbLignes(uiParamLignes);
 	pLISMATMatrice = LISParamMatrice;
 
 }
@@ -266,10 +266,10 @@ template <class MType> void CMatrice<MType>::MATModifierMatrice(int iParamLignes
 ***************************************************************************************************************/
 
 template <class MType> void CMatrice<MType>::MATAfficherMatrice() {
-	for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-		for (int iColonneIterator = 0; iColonneIterator < iMATNbrColonnes; iColonneIterator++)
+	for (int iLigneIterator = 0; iLigneIterator < uiMATNbLignes; iLigneIterator++) {
+		for (int iColonneIterator = 0; iColonneIterator < uiMATNbColonnes; iColonneIterator++)
 		{
-			std::cout << pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iColonneIterator] << "  ";
+			std::cout << pLISMATMatrice[iLigneIterator * uiMATNbColonnes + iColonneIterator] << "  ";
 		}
 		std::cout << std::endl;
 	}
@@ -278,15 +278,13 @@ template <class MType> void CMatrice<MType>::MATAfficherMatrice() {
 
 /*************************************************************************************************************
 * Resume : Fonction modifiant l'element du tableau à partir de coordonnees(lignes, colonnes)
-* Entrees: int iParamLignes, int iParamColonnes, MType MTParamElement
-* Preconditions: { (iParamLignes && iParamColonne) <=0}
+* Entrees: int uiParamLignes, int iParamColonnes, MType MTParamElement
+* Preconditions: { (uiParamLignes && iParamColonne) <=0}
 * Sorties:
-* Postconditions: {Element aux coordonnees iParamLignes et iParamColonnes est egale a MTParamElement}
+* Postconditions: {Element aux coordonnees uiParamLignes et iParamColonnes est egale a MTParamElement}
 ***************************************************************************************************************/
 
-template <class MType> void CMatrice<MType>::MATModifierElement2D(int iParamLignes, int iParamColonnes, MType MTParamElement) {
-	pLISMATMatrice[iParamLignes * iMATNbrColonnes + iParamColonnes] = MTParamElement;
-}
+
 
 /*************************************************************************************************************
 * Resume : Fonction modifiant l'element du tableau en focntion de son indice
@@ -296,8 +294,8 @@ template <class MType> void CMatrice<MType>::MATModifierElement2D(int iParamLign
 * Postconditions: {pLISMATMatrice[iIndice] = MTParamElement}
 ***************************************************************************************************************/
 
-template <class MType> void CMatrice<MType>::MATModifierElement1D(int iIndice, MType MTParamElement) {
-	pLISMATMatrice[iIndice] = MTParamElement;
+template <class MType> void CMatrice<MType>::MATModifierElement1D(unsigned int uiIndice, MType MTParamElement) {
+	pLISMATMatrice[uiIndice] = MTParamElement;
 }
 
 /*************************************************************************************************************
@@ -308,8 +306,8 @@ template <class MType> void CMatrice<MType>::MATModifierElement1D(int iIndice, M
 * Postconditions: {Renvoie l'element du tableau a l'indice iParamIndice}
 ***************************************************************************************************************/
 
-template <class MType> MType CMatrice<MType>::MATLireTableau(int iParamIndice) {
-	return pLISMATMatrice[iParamIndice];
+template <class MType> MType CMatrice<MType>::MATLireTableau(unsigned int uiParamIndice) {
+	return pLISMATMatrice[uiParamIndice];
 }
 
 /*************************************************************************************************************
@@ -322,11 +320,11 @@ template <class MType> MType CMatrice<MType>::MATLireTableau(int iParamIndice) {
 
 
 template <class MType>  CMatrice<MType> CMatrice<MType>::MATTransposer() {
-	CMatrice<MType> newMatrice(iMATNbrColonnes, iMATNbrLignes);
+	CMatrice<MType> newMatrice(uiMATNbColonnes, uiMATNbLignes);
 
 	int iBoucle = 0;
-	for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-		for (int iColonneIterator = 0; iColonneIterator < iMATNbrColonnes; iColonneIterator++) {
+	for (int iLigneIterator = 0; iLigneIterator < uiMATNbLignes; iLigneIterator++) {
+		for (int iColonneIterator = 0; iColonneIterator < uiMATNbColonnes; iColonneIterator++) {
 
 			newMatrice.MATModifierElement2D(iColonneIterator, iLigneIterator, pLISMATMatrice[iBoucle]);
 			iBoucle++;
@@ -345,16 +343,16 @@ template <class MType>  CMatrice<MType> CMatrice<MType>::MATTransposer() {
 ***************************************************************************************************************/
 
 template<class MType> CMatrice<MType> CMatrice<MType>::operator+(CMatrice<MType> MATParamMatrice)const {
-	int iNbrLignes2 = MATParamMatrice.MATLireNbrLignes();
-	int iNbrColonnes2 = MATParamMatrice.MATLireNbrColonnes();
+	unsigned int uiNbLignes2 = MATParamMatrice.MATLireNbLignes();
+	unsigned int uiNbColonnes2 = MATParamMatrice.MATLireNbColonnes();
 
-	if ((iMATNbrLignes == iNbrColonnes2) && (iNbrLignes2 == iMATNbrColonnes))
+	if ((uiMATNbLignes == uiNbColonnes2) && (uiNbLignes2 == uiMATNbColonnes))
 	{
 
-		int iTailleMat = iMATNbrLignes * iMATNbrColonnes;
+		unsigned int uiTailleMat = uiMATNbLignes * uiMATNbColonnes;
 
-		CMatrice<MType> newMatrice(iMATNbrColonnes, iMATNbrLignes);
-		for (int iBoucle = 0; iBoucle < iTailleMat; iBoucle++)
+		CMatrice<MType> newMatrice(uiMATNbColonnes, uiMATNbLignes);
+		for ( int iBoucle = 0; iBoucle < uiTailleMat; iBoucle++)
 		{
 			newMatrice.MATModifierElement1D(iBoucle, pLISMATMatrice[iBoucle] + MATParamMatrice[iBoucle]);
 
@@ -376,16 +374,16 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator+(CMatrice<MType>
 ***************************************************************************************************************/
 
 template<class MType> CMatrice<MType> CMatrice<MType>::operator-(CMatrice<MType> MATParamMatrice)const {
-	int iNbrLignes2 = MATParamMatrice.MATLireNbrLignes();
-	int iNbrColonnes2 = MATParamMatrice.MATLireNbrColonnes();
+	unsigned int uiNbLignes2 = MATParamMatrice.MATLireNbLignes();
+	unsigned int uiNbColonnes2 = MATParamMatrice.MATLireNbColonnes();
 
-	if ((iMATNbrLignes == iNbrColonnes2) && (iNbrLignes2 == iMATNbrColonnes))
+	if ((uiMATNbLignes == uiNbColonnes2) && (uiNbLignes2 == uiMATNbColonnes))
 	{
 
-		int iTailleMat1 = iMATNbrLignes * iMATNbrColonnes;
+		unsigned int uiTailleMat1 = uiMATNbLignes * uiMATNbColonnes;
 
-		CMatrice<MType> newMatrice(iMATNbrColonnes, iMATNbrLignes);
-		for (int iBoucle = 0; iBoucle < iTailleMat1; iBoucle++)
+		CMatrice<MType> newMatrice(uiMATNbColonnes, uiMATNbLignes);
+		for (int iBoucle = 0; iBoucle < uiTailleMat1; iBoucle++)
 		{
 			newMatrice.MATModifierElement1D(iBoucle, pLISMATMatrice[iBoucle] - MATParamMatrice[iBoucle]);
 
@@ -407,22 +405,22 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator-(CMatrice<MType>
 ***************************************************************************************************************/
 
 template<class MType> CMatrice<MType> CMatrice<MType>::operator*(CMatrice<MType> MATParamMatrice)const {
-	int iNbrLignes2 = MATParamMatrice.MATLireNbrLignes();
-	int iNbrColonnes2 = MATParamMatrice.MATLireNbrColonnes();
+	unsigned int uiNbLignes2 = MATParamMatrice.MATLireNbLignes();
+	unsigned int uiNbColonnes2 = MATParamMatrice.MATLireNbColonnes();
 
 
-	if ((iMATNbrLignes == iNbrColonnes2) && (iNbrLignes2 == iMATNbrColonnes))
+	if ((uiMATNbLignes == uiNbColonnes2) && (uiNbLignes2 == uiMATNbColonnes))
 	{
-		CMatrice<MType> newMatrice(iMATNbrLignes, iNbrColonnes2);
+		CMatrice<MType> newMatrice(uiMATNbLignes, uiNbColonnes2);
 		MType mtpValeur;
 
-		for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-			for (int iColonneIterator = 0; iColonneIterator < iNbrColonnes2; iColonneIterator++) {
+		for (unsigned int uiLigneIterator = 0; uiLigneIterator < uiMATNbLignes; uiLigneIterator++) {
+			for (unsigned int uiColonneIterator = 0; uiColonneIterator < uiNbColonnes2; uiColonneIterator++) {
 				mtpValeur = 0;
-				for (int iSommeProduit = 0; iSommeProduit < iMATNbrLignes; iSommeProduit++) {
-					mtpValeur = mtpValeur + pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iSommeProduit] * MATParamMatrice[iSommeProduit * iNbrColonnes2 + iColonneIterator];
+				for (int iSommeProduit = 0; iSommeProduit < uiMATNbLignes; iSommeProduit++) {
+					mtpValeur = mtpValeur + pLISMATMatrice[uiLigneIterator * uiMATNbColonnes + iSommeProduit] * MATParamMatrice[iSommeProduit * uiNbColonnes2 + uiColonneIterator];
 				}
-				newMatrice.MATModifierElement2D(iLigneIterator, iColonneIterator, mtpValeur);
+				newMatrice.MATModifierElement2D(uiLigneIterator, uiColonneIterator, mtpValeur);
 
 			}
 		}
@@ -444,10 +442,10 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator*(CMatrice<MType>
 
 template<class MType> CMatrice<MType> CMatrice<MType>::operator*(MType mtpParam)const {
 
-	int iTailleMat = iMATNbrLignes * iMATNbrColonnes;
-	CMatrice<MType> newMatrice(iMATNbrColonnes, iMATNbrLignes);
-	for (int iIterateur = 0; iIterateur < iTailleMat; iIterateur++) {
-		newMatrice.MATModifierElement1D(iIterateur, pLISMATMatrice[iIterateur] * mtpParam);
+	unsigned int uiTailleMat = uiMATNbLignes * uiMATNbColonnes;
+	CMatrice<MType> newMatrice(uiMATNbColonnes, uiMATNbLignes);
+	for (unsigned int uiIterateur = 0; uiIterateur < uiTailleMat; uiIterateur++) {
+		newMatrice.MATModifierElement1D(uiIterateur, pLISMATMatrice[uiIterateur] * mtpParam);
 	}
 	return newMatrice;
 }
@@ -461,23 +459,23 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator*(MType mtpParam)
 ***************************************************************************************************************/
 
 template<class MType> CMatrice<MType> CMatrice<MType>::operator/(CMatrice<MType> MATParamMatrice)const {
-	int iNbrLignes2 = MATParamMatrice.MATLireNbrLignes();
-	int iNbrColonnes2 = MATParamMatrice.MATLireNbrColonnes();
-	int iTaille1 = iMATNbrColonnes * iMATNbrLignes;
+	unsigned int uiNbLignes2 = MATParamMatrice.MATLireNbLignes();
+	unsigned int uiNbColonnes2 = MATParamMatrice.MATLireNbColonnes();
+	unsigned int uiTaille1 = uiMATNbColonnes * uiMATNbLignes;
 
 
-	if ((iMATNbrLignes == iNbrColonnes2) && (iNbrLignes2 == iMATNbrColonnes))
+	if ((uiMATNbLignes == uiNbColonnes2) && (uiNbLignes2 == uiMATNbColonnes))
 	{
-		CMatrice<MType> newMatrice(iMATNbrLignes, iNbrColonnes2);
+		CMatrice<MType> newMatrice(uiMATNbLignes, uiNbColonnes2);
 		MType mtpValeur;
 
-		for (int iLigneIterator = 0; iLigneIterator < iMATNbrLignes; iLigneIterator++) {
-			for (int iColonneIterator = 0; iColonneIterator < iNbrColonnes2; iColonneIterator++) {
+		for (int iLigneIterator = 0; iLigneIterator < uiMATNbLignes; iLigneIterator++) {
+			for (int iColonneIterator = 0; iColonneIterator < uiNbColonnes2; iColonneIterator++) {
 				mtpValeur = 0;
-				for (int iSommeProduit = 0; iSommeProduit < iMATNbrLignes; iSommeProduit++) {
-					if (MATParamMatrice[iSommeProduit * iNbrColonnes2 + iColonneIterator] != 0) {
+				for (int iSommeProduit = 0; iSommeProduit < uiMATNbLignes; iSommeProduit++) {
+					if (MATParamMatrice[iSommeProduit * uiNbColonnes2 + iColonneIterator] != 0) {
 
-						mtpValeur = mtpValeur + (pLISMATMatrice[iLigneIterator * iMATNbrColonnes + iSommeProduit] * (1 / MATParamMatrice[iSommeProduit * iNbrColonnes2 + iColonneIterator]));
+						mtpValeur = mtpValeur + (pLISMATMatrice[iLigneIterator * uiMATNbColonnes + iSommeProduit] * (1 / MATParamMatrice[iSommeProduit * uiNbColonnes2 + iColonneIterator]));
 					}
 					else {
 						CException CException(1);
@@ -524,8 +522,8 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator/(MType mtpParam)
 * Postconditions: {Cmatrice[iIndice] renvoie l'elemetn du tableau a l'indice iIndice}
 ***************************************************************************************************************/
 
-template<class MType> MType& CMatrice<MType>::operator[](const int iIndice) {
-	return pLISMATMatrice[iIndice];
+template<class MType> MType& CMatrice<MType>::operator[](const unsigned int uiIndice) {
+	return pLISMATMatrice[uiIndice];
 }
 
 /*************************************************************************************************************
@@ -537,11 +535,11 @@ template<class MType> MType& CMatrice<MType>::operator[](const int iIndice) {
 ***************************************************************************************************************/
 
 template<class MType> CMatrice<MType>& CMatrice<MType>::operator=(CMatrice<MType> MATParam) {
-	iMATNbrColonnes = MATParam.iMATNbrColonnes;
-	iMATNbrLignes = MATParam.iMATNbrLignes;
+	uiMATNbColonnes = MATParam.uiMATNbColonnes;
+	uiMATNbLignes = MATParam.uiMATNbLignes;
 
-	pLISMATMatrice = new MType[iMATNbrColonnes * iMATNbrLignes];
-	for (int iIterator = 0; iIterator < iMATNbrColonnes * iMATNbrLignes; iIterator++) {
+	pLISMATMatrice = new MType[uiMATNbColonnes * uiMATNbLignes];
+	for (int iIterator = 0; iIterator < uiMATNbColonnes * uiMATNbLignes; iIterator++) {
 		pLISMATMatrice[iIterator] = MATParam.pLISMATMatrice[iIterator];
 	}
 	return *this;

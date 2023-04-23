@@ -1,17 +1,4 @@
-﻿  ProjetCMatriceC++.cpp
-C:\Users\souli\source\repos\ProjetCMatriceC++\CListe.h(130,28): warning C4018: '<' : incompatibilité signed/unsigned
-C:\Users\souli\source\repos\ProjetCMatriceC++\CListe.h(124): message : pendant la compilation de la fonction membre classe modèle 'CListe<double>::CListe(const CListe<double> &)'
-C:\Users\souli\source\repos\ProjetCMatriceC++\ProjetCMatriceC++.cpp(17): message : voir la référence à l'instanciation de la fonction modèle 'CListe<double>::CListe(const CListe<double> &)' en cours de compilation
-C:\Users\souli\source\repos\ProjetCMatriceC++\ProjetCMatriceC++.cpp(12): message : voir la référence à l'instanciation classe modèle 'CListe<double>' en cours de compilation
-C:\Users\souli\source\repos\ProjetCMatriceC++\CListe.h(178,38): warning C4018: '>' : incompatibilité signed/unsigned
-C:\Users\souli\source\repos\ProjetCMatriceC++\CListe.h(162): message : pendant la compilation de la fonction membre classe modèle 'void CListe<double>::LISAjouterElement(LType,unsigned int)'
-          with
-          [
-              LType=double
-          ]
-C:\Users\souli\source\repos\ProjetCMatriceC++\ProjetCMatriceC++.cpp(29): message : voir la référence à l'instanciation de la fonction modèle 'void CListe<double>::LISAjouterElement(LType,unsigned int)' en cours de compilation
-          with
-          [
-              LType=double
-          ]
+﻿  CMatriceV2.cpp
+  ProjetCMatriceC++.cpp
+  Génération de code en cours...
   ProjetCMatriceC++.vcxproj -> C:\Users\souli\source\repos\ProjetCMatriceC++\Debug\ProjetCMatriceC++.exe
