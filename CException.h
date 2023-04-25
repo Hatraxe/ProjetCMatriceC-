@@ -1,6 +1,8 @@
 // Définition de la valeur initiale d’une exception
 #pragma once
-#define FAUX 0
+#define DEFAUT 0
+#define DIVISIONZERO 1
+#define ERREURTAILLE 2
 
 class CException
 {
@@ -12,8 +14,8 @@ class CException
 private:
 	unsigned int uiEXCValeur; //Cette variable contient la valeur de l’exception
 
-	/*ETAT INITIALe
-	uiEXCvaleur = FAUX*/
+	//Par defaut uiEXCValeur = FAUX
+		
 
 	//Primitives :
 public:

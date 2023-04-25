@@ -24,7 +24,7 @@ Entraîne : L’exception est intialisée à FAUX
 ***************************************************************/
 CException::CException()
 {
-	uiEXCValeur = FAUX;
+	uiEXCValeur = DEFAUT;
 	// l’exception est initialisée
 }
 
