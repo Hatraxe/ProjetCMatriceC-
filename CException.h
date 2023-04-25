@@ -14,8 +14,8 @@ class CException
 private:
 	unsigned int uiEXCValeur; //Cette variable contient la valeur de l’exception
 
-	/*ETAT INITIALe
-	uiEXCvaleur = FAUX*/
+	//Par defaut uiEXCValeur = FAUX
+		
 
 	//Primitives :
 public:
