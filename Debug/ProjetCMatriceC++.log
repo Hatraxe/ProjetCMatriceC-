@@ -1,7 +1,4 @@
 ﻿  CAnalyseurFichier.cpp
-  CMatrice.cpp
-  COperationMatrice.cpp
-  ProjetCMatriceC++.cpp
-  Génération de code en cours...
-  LINK : C:\Users\souli\source\repos\ProjetCMatriceC++\Debug\ProjetCMatriceC++.exe introuvable ou non généré par la dernière édition de liens incrémentielle ; édition de liens complète en cours
+C:\Users\souli\source\repos\ProjetCMatriceC++\CAnalyseurFichier.cpp(48): warning C4715: 'CAnalyseurFichier::ANAAnalyseurLigne' : les chemins de contrôle ne retournent pas tous une valeur
+C:\Users\souli\source\repos\ProjetCMatriceC++\CAnalyseurFichier.cpp(193): warning C4715: 'CAnalyseurFichier::ANAMatriceFichier' : les chemins de contrôle ne retournent pas tous une valeur
   ProjetCMatriceC++.vcxproj -> C:\Users\souli\source\repos\ProjetCMatriceC++\Debug\ProjetCMatriceC++.exe

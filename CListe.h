@@ -23,7 +23,6 @@ public:
 	S : néant
 	entraîne : la liste est initialisée à vide */
 
-
 	CListe(const CListe& LISParam);
 	/* Constructeur de recopie de la classe
 	E : l’objet que l’on recopie dans l’objet en cours

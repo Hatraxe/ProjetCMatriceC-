@@ -1,15 +1,5 @@
-/*CLASSE CException
-DOCUMENTATION
-Attributs : uiEXCvaleur, entier, contient la valeur de l’exception
-Structure : Cette classe contient une méthode de modification et une méthode
-de consultation de la valeur de l’exception
-Méthode : néant
-Modules internes :*/
-
 #include "CException.h"
 #include <fstream>
-
-//CORPS
 
 /**************************************************************
 Nom : CException
@@ -24,8 +14,7 @@ Entraîne : L’exception est intialisée à FAUX
 ***************************************************************/
 CException::CException()
 {
-	uiEXCValeur = DEFAUT;
-	// l’exception est initialisée
+	uiEXCValeur = DEFAUT; // Initialisation de la valeur a 0
 }
 
 
@@ -43,7 +32,6 @@ Entraîne : L’exception est modifiée
 void CException::EXCModifierValeur(unsigned int valeur)
 {
 	uiEXCValeur = valeur;
-	// l’exception est modifiée
 }
 
 

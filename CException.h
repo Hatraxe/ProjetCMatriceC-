@@ -1,8 +1,12 @@
 // Définition de la valeur initiale d’une exception
 #pragma once
 #define DEFAUT 0
-#define DIVISIONZERO 1
-#define ERREURTAILLE 2
+#define Division_Par_Zero 101
+#define Erreur_Taille 102
+#define Hors_Tableau 103
+#define Erreur_Type 104
+#define Erreur_Type 104
+
 
 class CException
 {
@@ -25,7 +29,7 @@ public:
 	E : néant
 	 nécessite : néant
 	S : néant
-	entraîne : l’exception est initialisé à FAUX */
+	entraîne : l’exception est initialisé à DEFAUT */
 
 
 	~CException() {}
