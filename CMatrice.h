@@ -5,9 +5,7 @@
 #pragma once
 using namespace std;
 
-#define Division_Par_Zero 101
-#define Erreur_Taille 102
-#define Hors_Tableau 103
+
 
 template <class MType> class CMatrice
 {
@@ -29,7 +27,7 @@ public:
 	Sortie : neant
 	Post-condition : La matrice est initialisee à vide et les valeurs de nombre de lignes et de colonnes mis a 0
 	*/
-	CMatrice<MType>(); 
+	CMatrice<MType>();
 
 
 	/* Constructeur de confort de la classe
@@ -38,7 +36,7 @@ public:
 	Sortie : neant
 	Post-condition : La matrice est initialisee avec les valeurs de nombre de lignes et de colonnes sont remplacées par celles passées en parametre
 	*/
-	CMatrice<MType>(unsigned int uiParamLignes, unsigned int iParamColonnes); 
+	CMatrice<MType>(unsigned int uiParamLignes, unsigned int iParamColonnes);
 
 
 	/* Constructeur de recopie de la classe
@@ -56,7 +54,7 @@ public:
 	Sortie : neant
 	Post-condition : La matrice a ete detruite
 	*/
-	~CMatrice<MType>(); 
+	~CMatrice<MType>();
 
 
 	//Accesseurs de lecture
@@ -95,7 +93,7 @@ public:
 	Post-condition : (l'element est retourne) ou (CException horstableau est retourne : (uiParamLignes >= uiMATNbLignes ou  uiParamColonnes >= uiMATNbColonnes))
 	*/
 	MType MATLireElement(unsigned int uiParamLignes, unsigned int uiParamColonnes);
-	
+
 
 	//Accesseurs en ecriture
 
@@ -110,32 +108,82 @@ public:
 
 	//Déclaration des surcharges
 
+
+	/* Surcharge de l'operateur +
+	Entree : la matrice de droit quand on fait MAT1 + MAT2
+	Pre-condition : les tailles des matrices sont egales
+	Sortie : CMatrice<MType>
+	Post-condition : (le CMatrice retourne = objet en cours + matrice en parametre) ou (CException erreurtaille est retourne)
+	*/
 	CMatrice<MType> operator+(CMatrice<MType> MATParamMatrice)const;
 
+
+	/* Surcharge de l'operateur -
+	Entree : la matrice de droit quand on fait MAT1 - MAT2
+	Pre-condition : les tailles des matrices sont egales
+	Sortie : CMatrice<MType>
+	Post-condition : (le CMatrice retourne = objet en cours - matrice en parametre) ou (CException erreurtaille est retourne)
+	*/
 	CMatrice<MType> operator-(CMatrice<MType> MATParamMatrice)const;
 
+
+	/* Surcharge de l'operateur *
+	Entree : la matrice de droit quand on fait MAT1 * MAT2
+	Pre-condition : la taille de ligne de la matrice de gauche doit etre egales a celle de colonnes de la matrice de droite
+	Sortie : CMatrice<MType>
+	Post-condition : (le CMatrice retourne = objet en cours * matrice en parametre) ou (CException erreurtaille est retourne)
+	*/
 	CMatrice<MType> operator*(CMatrice<MType> MATParamMatrice)const;
+
+
+	/* Surcharge de l'operateur * par un MType
+	Entree : un MType pour faire objet en cours * MType
+	Pre-condition : 
+	Sortie : CMatrice<MType>
+	Post-condition : le CMatrice retourne = objet en cours * MType
+	*/
 	CMatrice<MType> operator*(MType MTParam)const;
 
+
+	/* Surcharge de l'operateur /
+	Entree : une constante
+	Pre-condition : 
+	Sortie : CMatrice<MType>
+	Post-condition : (le CMatrice retourne = objet en cours / par le parametre) ou (CException divisionparzero si MTParam ==0 )
+	*/
 	CMatrice<MType> operator/(MType MTParam)const;
 
+
+	/* Surcharge de l'operateur []
+	Entree : un indice ou postion a laquelle on veut recuperer l'element
+	Pre-condition :
+	Sortie : l'element a la position en parametre
+	Post-condition : (MAT1[indice] retourne l'element a cette position) ou (CException erreurtaille si la position depasse le "tableau" )
+	*/
 	MType*& operator[](unsigned int iIndice);
 
+
+	/* Surcharge de l'operateur =
+	Entree : une reference de CMatrice
+	Pre-condition :
+	Sortie : une CMatrice egale a celle en parametre
+	Post-condition : 
+	*/
 	CMatrice<MType>& operator=(const CMatrice<MType>& MATParam);
 };
 
 
-/* Cette focntion permet de multiplier un double par un CMatrice
-	Entree : un double, et une matrice 
+	/* Cette fonction permet de multiplier un double par un CMatrice
+	Entree : un double, et une matrice
 	Pre-condition : neant
-	Sortie : une matrice de double 
+	Sortie : une matrice de double
 	Post-condition : La matrice retourne contient les valeurs correspondant au double * la matrice
 	*/
 CMatrice<double> operator*(double mtpParam, CMatrice<double> mtpParamMatrice);
 
 
 
-/* Constructeur par défaut de la classe
+	/* Constructeur par défaut de la classe
 	Entree : neant
 	Pre-condition : neant
 	Sortie : neant
@@ -149,7 +197,7 @@ template <class MType> CMatrice<MType>::CMatrice()
 }
 
 
-/* Constructeur de confort de la classe
+	/* Constructeur de confort de la classe
 	Entree : Le nombre de lignes et le nombre de colonnes
 	Pre-condition : neant
 	Sortie : neant
@@ -168,7 +216,7 @@ template <class MType> CMatrice<MType>::CMatrice(unsigned int uiParamLignes, uns
 }
 
 
-/* Constructeur de recopie de la classe
+	/* Constructeur de recopie de la classe
 	Entree : L'objet que l’on recopie dans l’objet en cours
 	Pre-condition : neant
 	Sortie : neant
@@ -220,19 +268,19 @@ template <class MType> unsigned int CMatrice<MType>::MATLireNbColonnes()
 }
 
 
-/* Accesseur de lecture de l'attribut nombre de lignes
+	/* Accesseur de lecture de l'attribut nombre de lignes
 	Entree : neant
 	Pre-condition : neant
 	Sortie : le nombre de lignes
 	Post-condition : le nombre de lignes est retourne
 	*/
-template <class MType> unsigned int CMatrice<MType>::MATLireNbLignes() 
+template <class MType> unsigned int CMatrice<MType>::MATLireNbLignes()
 {
 	return uiMATNbLignes;
 }
 
 
-/* Accesseur de lecture d'un element dans la matrice en focntion d'un indice de ligne et de colonne
+	/* Accesseur de lecture d'un element dans la matrice en focntion d'un indice de ligne et de colonne
 	Entree : neant
 	Pre-condition : neant
 	Sortie : l'element a l'indice de la colonne et de la ligne passe en parametre
@@ -243,7 +291,7 @@ template <class MType> MType CMatrice<MType>::MATLireElement(unsigned int uiPara
 	if (uiParamLignes > uiMATNbLignes || uiParamColonnes > uiParamColonnes)
 	{
 		CException horstableau;
-		horstableau.EXCModifierValeur(Hors_Tableau);
+		horstableau.EXCModifierValeur(HORS_TABLEAU);
 		throw (horstableau);
 	}
 	return ppMTMATMatrice[uiParamLignes][uiParamColonnes];
@@ -263,7 +311,7 @@ template <class MType> MType** CMatrice<MType>::MATLireMatrice()
 
 
 
-/* Accesseur en ecriture d'un element dans la matrice en focntion d'un indice de ligne et de colonne
+	/* Accesseur en ecriture d'un element dans la matrice en focntion d'un indice de ligne et de colonne
 	Entree : neant
 	Pre-condition : neant
 	Sortie : neant
@@ -274,7 +322,7 @@ template <class MType> void CMatrice<MType>::MATModifierElement(unsigned int uiP
 	if (uiParamLignes > uiMATNbLignes || uiParamColonnes > uiParamColonnes)
 	{
 		CException horstableau;
-		horstableau.EXCModifierValeur(Hors_Tableau);
+		horstableau.EXCModifierValeur(HORS_TABLEAU);
 		throw (horstableau);
 	}
 
@@ -287,7 +335,7 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator+(CMatrice<MType>
 	if ((uiMATNbLignes != MATParamMatrice.uiMATNbLignes) || (uiMATNbColonnes != MATParamMatrice.uiMATNbColonnes))
 	{
 		CException erreurtaille;
-		erreurtaille.EXCModifierValeur(Erreur_Taille);
+		erreurtaille.EXCModifierValeur(ERREUR_TAILLE);
 		throw (erreurtaille);
 	}
 	CMatrice<MType> MATAddition(uiMATNbLignes, uiMATNbColonnes);
@@ -309,7 +357,7 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator-(CMatrice<MType>
 	if (uiMATNbLignes != MATParamMatrice.MATLireNbLignes() || uiMATNbColonnes != MATParamMatrice.MATLireNbColonnes())
 	{
 		CException erreurtaille;
-		erreurtaille.EXCModifierValeur(Erreur_Taille);
+		erreurtaille.EXCModifierValeur(ERREUR_TAILLE);
 		throw (erreurtaille);
 	}
 	CMatrice<MType> MATResSoustraction(uiMATNbLignes, uiMATNbColonnes);
@@ -331,7 +379,7 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator*(CMatrice<MType>
 	if (uiMATNbColonnes != MATParamMatrice.MATLireNbLignes())
 	{
 		CException erreurtaille;
-		erreurtaille.EXCModifierValeur(Erreur_Taille);
+		erreurtaille.EXCModifierValeur(ERREUR_TAILLE);
 		throw (erreurtaille);
 	}
 	CMatrice<MType> MATResMultiplication(uiMATNbLignes, MATParamMatrice.uiMATNbColonnes);
@@ -374,7 +422,7 @@ template<class MType> CMatrice<MType> CMatrice<MType>::operator/(MType MTParam)c
 	if (MTParam == 0)
 	{
 		CException divisionzero;
-		divisionzero.EXCModifierValeur(Division_Par_Zero);
+		divisionzero.EXCModifierValeur(DIVISION_PAR_ZERO);
 		throw (divisionzero);
 	}
 	CMatrice<MType> MATResDivision(uiMATNbLignes, uiMATNbColonnes);

@@ -18,7 +18,6 @@ CException::CException()
 }
 
 
-
 /**************************************************************
 Nom : EXCmodifier valeur
 ***************************************************************
@@ -35,7 +34,6 @@ void CException::EXCModifierValeur(unsigned int valeur)
 }
 
 
-
 /**************************************************************
 Nom : EXClire valeur
 ***************************************************************
@@ -46,7 +44,7 @@ Nécessite : néant
 Sortie : la valeur de l’exception
 Entraîne : L’exception est retournée
 ***************************************************************/
-inline unsigned int CException::EXCLireValeur()
+unsigned int CException::EXCLireValeur()
 {
-	return(uiEXCValeur);
+	return uiEXCValeur;
 }

@@ -1,27 +1,20 @@
-// Définition de la valeur initiale d’une exception
 #pragma once
 #define DEFAUT 0
-#define Division_Par_Zero 101
-#define Erreur_Taille 102
-#define Hors_Tableau 103
-#define Erreur_Type 104
-#define Erreur_Type 104
+#define DIVISION_PAR_ZERO 101
+#define ERREUR_TAILLE 102
+#define HORS_TABLEAU 103
+#define ERREUR_TYPE 104
+#define ERREUR_FORMAT 105
+#define ERREUR_FICHIER 106
 
 
 class CException
 {
-	// Cette classe représente une ou plusieurs exceptions levées
-		// par le programme
-
 		//Attributs :
 
 private:
 	unsigned int uiEXCValeur; //Cette variable contient la valeur de l’exception
 
-	//Par defaut uiEXCValeur = FAUX
-		
-
-	//Primitives :
 public:
 
 	CException();
@@ -39,7 +32,7 @@ public:
 	S : néant
 	entraîne : l’exception est détruite*/
 
-
+	//Accesseur en ecriture
 	void EXCModifierValeur(unsigned int valeur);
 	/* Cette fonction permet de modifier la valeur de l’exception
 	E : nouvelle valeur
@@ -47,6 +40,7 @@ public:
 	S : néant
 	entraîne : la valeur de l’exception est modifiée*/
 
+	//Acceseur en lecture
 
 	unsigned int EXCLireValeur();
 	/* Cette fonction permet de consulter la valeur de l’exception

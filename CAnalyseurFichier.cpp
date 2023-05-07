@@ -6,15 +6,14 @@
 using namespace std;
 
 #pragma warning(disable : 4996)
-#pragma warning(disable : 4244)
 
-/*************************************************************************************************************
-* Resume : Fonction analysant les informations que la ligne passe en parametre donne
-* Entrees: char* pcStr
-* Preconditions: {}
-* Sorties: int
-* Postconditions: {identification du type d'information}
-***************************************************************************************************************/
+
+	/* Cette methode analyse et identifie les différentes types de lignes
+	Entree : la chaine de caractere a analyser
+	Pre-condition : neant
+	Sortie : un entier correspondant au type de ligne (1 pour le typematrice, 2 pour le nbr de lignes, 3 celui de colonnes et 4 pour le debut les valeurs de la amtrice et zero le reste
+	Post-condition : l'entier retourner correspond au type de ligne
+	*/
 
 int CAnalyseurFichier::ANAAnalyseurLigne(char* pcStr) 
 {
@@ -46,14 +45,12 @@ int CAnalyseurFichier::ANAAnalyseurLigne(char* pcStr)
 	}
 
 }
-
-/*************************************************************************************************************
-* Resume : Supression des espaces de la chaine de caractere
-* Entrees: char* pcStr
-* Preconditions: {}
-* Sorties:
-* Postconditions: {la chaine de caractere n'a plus d'espace}
-***************************************************************************************************************/
+	/* Cette methode permet de supprimer les espace dans une chaine de caractere
+	Entree : la chaine de caractere que l'on veut traiter
+	Pre-condition : neant
+	Sortie : la chiane de caractere sans les espace
+	Post-condition : la chaine de caractere retourne n'a plus d'espace
+	*/
 
 void CAnalyseurFichier::ANASupprimerEspace(char* pcStr)
 {
@@ -68,14 +65,13 @@ void CAnalyseurFichier::ANASupprimerEspace(char* pcStr)
 	pcStr[uiRepere] = '\0';
 }
 
-/*************************************************************************************************************
-* Resume : Creer un objet CMatrice a partir d'un fichier texte
-* Entrees: cons char* pcLien
-* Preconditions: {}
-* Sorties:CMatrice<double>
-* Postconditions: {Renvoie la CMatrice correspondant aux information issus du fichier}
-***************************************************************************************************************/
 
+	/* Cette methode permet de creer une matrice de double a partir du chemin d'un fichier texte
+	Entree : Le chemin du fichier texte
+	Pre-condition : le fichier dois suivre un certain format voir README.txt
+	Sortie : une nouvelle matrice de double avec les valeurs du fichier
+	Post-condition : La matrice retourne est possede tout les valeurs et attributs du fichier texte en parametre ou CException erreurfichier ou CException erreurtype ou
+	*/
 CMatrice<double> CAnalyseurFichier::ANAMatriceFichier(const char* pcCheminFichier) 
 {
 	ifstream fichierMatrice(pcCheminFichier);
@@ -97,9 +93,11 @@ CMatrice<double> CAnalyseurFichier::ANAMatriceFichier(const char* pcCheminFichie
 				pcTempoChaine = strtok(cLigne, "=");
 				pcTempoChaine = strtok(NULL, "=");
 
-				if (strstr(pcTempoChaine,"double")!= nullptr) 
+				if (strstr(pcTempoChaine,"double")== nullptr && strstr(pcTempoChaine, "int")==nullptr && strstr(pcTempoChaine, "float")==nullptr)
 				{
-					
+					CException erreurtype;
+					erreurtype.EXCModifierValeur(ERREUR_TYPE);
+					throw  erreurtype;
 				}
 			}
 			else if (iTypeLigne == 2) 
@@ -124,69 +122,23 @@ CMatrice<double> CAnalyseurFichier::ANAMatriceFichier(const char* pcCheminFichie
 					do {
 						fichierMatrice.getline(cLigne, 1024);
 					} while (cLigne[0] == '\n' || cLigne[0] == '\0');
-					pcTempoChaine = strtok(cLigne, " []!§$£*+/?abcdefghijklmnopkrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ\t");
-					for (unsigned int uiBoucleColonnes = 0; uiBoucleColonnes < NbColonnes; uiBoucleColonnes++) {
+					pcTempoChaine = strtok(cLigne, " []abcdefghijklmnopkrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ\t");
+					for (unsigned int uiBoucleColonnes = 0; uiBoucleColonnes < NbColonnes; uiBoucleColonnes++)
+					{
 						dElementMatrice = stod(pcTempoChaine);
 						MATFichier.MATModifierElement(uiBoucleLignes, uiBoucleColonnes, dElementMatrice);
-						pcTempoChaine = strtok(NULL, " ");
-						
+						pcTempoChaine = strtok(NULL, " ");					
 					}
-
 				}
 				return MATFichier;
 			}
 		} while (cLigne[0] != NULL);
 		return MATErreur;
 	}
-	//CException CException(1);
-	/*if (fichier.is_open()) {
+	
+	CException erreurfichier;
+	erreurfichier.EXCModifierValeur(ERREUR_FICHIER);
+	throw erreurfichier;
 
-		char cLigne[1024];
-		int iTypeVariable;
-		char* cpBuffer;
-		//Type des elements de la matrice
-		do
-		{
-			fichier.getline(cLigne, 1024);
-			iTypeVariable = ANAAnalyseLigne(cLigne);
-			if (iTypeVariable == 1) {
-				cpBuffer = strtok(cLigne, "=");
-				cpBuffer = strtok(NULL, "=");
-				if (tolower(cpBuffer[0] != 'd')) {
-					//throw CException;
-				}
-			}
-			else if (iTypeVariable == 2) {
-				cpBuffer = strtok(cLigne, "=");
-				cpBuffer = strtok(NULL, "=");
-
-				//MATResult.MATModifierNbLignes(atoi(cpBuffer));
-			}
-			else if (iTypeVariable == 3) {
-				cpBuffer = strtok(cLigne, "=");
-				cpBuffer = strtok(NULL, "=");
-				//MATResult.MATModifierNbrColonnes(atod(cpBuffer));
-			}
-			else if (iTypeVariable == 4) {
-				int NbLignes = MATResult.MATLireNbLignes();
-				int NbColonnes = MATResult.MATLireNbColonnes();
-				double dElement;
-				_CRT_DOUBLE dblValeur;
-				for (int iIterateurLignes = 0; iIterateurLignes < NbLignes; iIterateurLignes++) {
-					do {
-						fichier.getline(cLigne, 1024);
-					} while (cLigne[0] == '\n' || cLigne[0] == '\0');
-					cpBuffer = strtok(cLigne, " []abcdefghijklmnopkrstuvwxyzABCDEFGHIJKLMNOPKRSTUVWXYZ\t");
-					for (int iIterateurColonnes = 0; iIterateurColonnes < NbColonnes; iIterateurColonnes++) {
-						dElement = _atodbl(&dblValeur, cpBuffer);
-						//MATResult.MATModifierElement2D(iIterateurLignes, iIterateurColonnes, dblValeur.x);
-						cpBuffer = strtok(NULL, " ");
-
-					}
-
-				}
-			}
-		} while (cLigne[0] != NULL);
-		return MATResult;
-	}*/
+	
 }
